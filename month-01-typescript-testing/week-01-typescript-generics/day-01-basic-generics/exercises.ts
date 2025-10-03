@@ -14,3 +14,18 @@ function createPair<T, U>(first: T, second: U): { first: T; second: U } {
 
 const pairStr = createPair("name", "reski");
 console.log(pairStr.second);
+
+// Exercise 3: Real-world Challenge
+function filterByProperty<T, K extends keyof T>(arr: T[], key: K, value: T[K]) {
+  return arr.filter((item) => item[key] === value);
+}
+
+// test case
+const users = [
+  { id: 1, name: "Andi", active: true },
+  { id: 1, name: "Budi", active: false },
+  { id: 1, name: "Citra", active: true },
+];
+
+const activeUsers = filterByProperty(users, "active", true);
+console.log(activeUsers);

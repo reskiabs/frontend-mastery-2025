@@ -305,3 +305,59 @@ const [id, name] = getUser();
 ```
 
 Tuple = array dengan tipe dan posisi yang sudah ditentukan.
+
+## Jelaskan Exercise 3: Real-world Challenge
+
+Fungsi ini menggunakan **generic constraints** untuk filter array berdasarkan property tertentu dengan type-safe.
+
+### Breakdown Kode:
+
+```typescript
+function filterByProperty<T, K extends keyof T>(arr: T[], key: K, value: T[K]) {
+  return arr.filter((item) => item[key] === value);
+}
+```
+
+**Komponen:**
+
+1. **`<T, K extends keyof T>`**
+   - `T` = tipe object dalam array
+   - `K` = key/property dari object `T`
+   - `extends keyof T` = constraint: `K` harus salah satu key yang ada di `T`
+
+2. **`key: K`**
+   - Parameter `key` bertipe `K` (property name yang valid)
+   - TypeScript memastikan key yang dimasukkan benar-benar ada di object
+
+3. **`value: T[K]`**
+   - `T[K]` = tipe data dari property `K` pada object `T`
+   - Contoh: jika `K = "active"`, maka `T[K] = boolean`
+
+### Contoh Penggunaan:
+
+```typescript
+const users = [
+  { id: 1, name: "Andi", active: true },
+  { id: 2, name: "Budi", active: false },
+  { id: 3, name: "Citra", active: true },
+];
+
+const activeUsers = filterByProperty(users, "active", true);
+// K = "active"
+// T[K] = boolean
+// TypeScript tahu value harus boolean
+```
+
+### Type Safety:
+
+```typescript
+filterByProperty(users, "active", true);     // ✅ OK
+filterByProperty(users, "name", "Andi");     // ✅ OK
+filterByProperty(users, "active", "hello");  // ❌ Error! value harus boolean
+filterByProperty(users, "invalid", true);    // ❌ Error! key tidak ada
+```
+
+**Manfaat:**
+- Autocomplete untuk key yang tersedia
+- Type checking untuk value sesuai tipe property
+- Reusable untuk berbagai tipe object
