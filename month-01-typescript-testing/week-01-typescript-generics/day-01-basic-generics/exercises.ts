@@ -1,36 +1,16 @@
-function identityAny(arg: any): any {
-  return arg;
-}
-const result = identityAny(1);
-
-function identity<T>(arg: T): T {
-  return arg;
+// Exercise 1: Basic Generic Function
+function getLastItem<T>(arr: T[]): T {
+  let last = arr[arr.length - 1];
+  return last;
 }
 
-const teks = identity<string>("hello"); // const teks: string
-const angka = identity<number>(1);
-const objek = identity({ x: 10 });
-const result4 = identity("hello"); // type inference
-let result5 = identity("hello"); // has type string
+const lastNum = getLastItem([1, 2, 3, 4, 5]);
+const lastStr = getLastItem(["a", "b", "c"]);
 
-function getFirst<T>(arr: T[]): T {
-  return arr[0];
+// Exercise 2: Generic Object Function
+function createPair<T, U>(first: T, second: U): { first: T; second: U } {
+  return { first, second };
 }
 
-const num = getFirst([1, 4, 7]);
-const str = getFirst(["a", "b"]);
-
-function wrapInArray<T>(value: T): T[] {
-  return [value];
-}
-
-const number = wrapInArray(5);
-const string = wrapInArray("hello");
-const mixed = wrapInArray({ id: 1 });
-
-function getLength<T>(arr: T[]): number {
-  return arr.length;
-}
-
-const array = getLength([1, 2, 4, 5, 6]);
-console.log(array);
+const pairStr = createPair("name", "reski");
+console.log(pairStr.second);

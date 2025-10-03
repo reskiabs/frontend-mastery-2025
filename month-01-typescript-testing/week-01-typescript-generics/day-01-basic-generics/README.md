@@ -182,3 +182,126 @@ Literal type berguna untuk union types yang ketat:
 type Status = "success" | "error";
 const status = identity("success"); // status: "success"  bisa assign ke Status
 ```
+
+## Jelaskan Contoh 4: Real-world - Response Wrapper
+
+**Response Wrapper** adalah pola umum dalam pengembangan API untuk membungkus data response dengan metadata tambahan.
+
+### Struktur:
+
+```typescript
+interface ApiResponse<T> {
+  data: T;           // Data aktual (bisa tipe apa saja)
+  status: number;    // HTTP status code
+  message: string;   // Pesan response
+}
+```
+
+### Kenapa menggunakan Generic `<T>`?
+
+- `data` bisa berisi berbagai tipe objek (user, product, order, dll)
+- Dengan generic, TypeScript tahu tipe data spesifik di dalam `data`
+- Type-safe: tidak perlu type assertion saat mengakses properti
+
+### Contoh Penggunaan:
+
+```typescript
+// User response - T = { id: number; name: string }
+const userResponse: ApiResponse<{ id: number; name: string }> = {
+  data: { id: 1, name: "Andi" },  // TypeScript tahu struktur ini
+  status: 200,
+  message: "Success",
+};
+
+userResponse.data.name;  // ✅ TypeScript tahu ada property 'name'
+
+// Product response - T = { id: number; price: number }
+const productResponse: ApiResponse<{ id: number; price: number }> = {
+  data: { id: 101, price: 50000 },  // Struktur berbeda
+  status: 200,
+  message: "Success",
+};
+
+productResponse.data.price;  // ✅ TypeScript tahu ada property 'price'
+```
+
+### Manfaat:
+- Konsistensi struktur response
+- Type safety untuk data yang berbeda-beda
+- Autocomplete saat akses `data`
+- Real-world pattern di API development
+
+## Cara me-return key di createPair
+
+Jika Anda ingin return sebagai **object dengan key**, ubah return type:
+
+```typescript
+// Return sebagai object
+function createPair<T, U>(first: T, second: U): { first: T; second: U } {
+  return { first, second };
+}
+
+const pairStr = createPair("name", "reski");
+// pairStr.first === "name"
+// pairStr.second === "reski"
+```
+
+Atau bisa return sebagai **tuple**:
+
+```typescript
+// Return sebagai tuple
+function createPair<T, U>(first: T, second: U): [T, U] {
+  return [first, second];
+}
+
+const pairStr = createPair("name", "reski");
+// pairStr[0] === "name"
+// pairStr[1] === "reski"
+```
+
+Pilih sesuai kebutuhan: **tuple** `[T, U]` atau **object** `{ first: T; second: U }`
+
+## Apa itu tuple?
+
+**Tuple** adalah tipe data array dengan **jumlah elemen dan tipe tetap** pada setiap posisi.
+
+**Perbedaan dengan Array biasa:**
+
+```typescript
+// Array biasa - semua elemen tipe sama, panjang bebas
+const arr: number[] = [1, 2, 3, 4, 5];
+
+// Tuple - tipe tiap posisi tetap, panjang tetap
+const tuple: [string, number] = ["age", 25];
+//            posisi 0  posisi 1
+```
+
+**Contoh Tuple:**
+
+```typescript
+// Tuple dengan 2 elemen: string dan number
+const person: [string, number] = ["John", 30];
+person[0]; // string
+person[1]; // number
+
+// Tuple dengan 3 elemen berbeda
+const data: [number, string, boolean] = [1, "hello", true];
+
+// Error jika urutan salah
+const wrong: [string, number] = [25, "age"]; // ❌ Error!
+```
+
+**Kegunaan:**
+
+```typescript
+// Return multiple values dengan tipe berbeda
+function getUser(): [number, string] {
+  return [1, "Reski"];
+}
+
+const [id, name] = getUser();
+// id: number
+// name: string
+```
+
+Tuple = array dengan tipe dan posisi yang sudah ditentukan.
