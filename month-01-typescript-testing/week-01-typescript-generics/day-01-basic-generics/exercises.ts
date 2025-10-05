@@ -29,3 +29,9 @@ const users = [
 
 const activeUsers = filterByProperty(users, "active", true);
 console.log(activeUsers);
+
+// TypeScript Generics - Topic #2: Generic Functions 🎯
+
+export function wrapInArray<T>(value: T): T[] {
+  return [value];
+}
